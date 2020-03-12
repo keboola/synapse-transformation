@@ -1,26 +1,32 @@
 {
     "require": {
-        "php": "^7.1",
-        "keboola/php-component": "^7.0.1"
+        "php": "^7.4",
+        "ext-mbstring": "*",
+        "ext-pdo": "*",
+        "doctrine/dbal": "^2.10",
+        "jdorn/sql-formatter": "dev-master",
+        "keboola/common-exceptions": "^1.0",
+        "keboola/php-component": "^8.1",
+        "keboola/php-datatypes": "^4.2"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1.0",
-        "keboola/coding-standard": ">=7.0.2",
-        "keboola/php-temp": "^1.0",
-        "phpstan/phpstan-shim": "^0.10.6",
-        "phpunit/phpunit": "^7.0",
-        "symfony/process": "^4.0",
-        "keboola/datadir-tests": "^2.0"
+        "keboola/coding-standard": ">=9.0.0",
+        "keboola/csv": "^2.1",
+        "keboola/datadir-tests": "^4.0",
+        "phpstan/phpstan": "^0.12.14",
+        "phpunit/phpunit": "^9.0.1",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {
-            "MyComponent\\": "src/"
+            "Keboola\\SynapseTransformation\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MyComponent\\Tests\\": "tests/phpunit/",
-            "MyComponent\\FunctionalTests\\": "tests/functional/"
+            "Keboola\\SynapseTransformation\\Tests\\": "tests/phpunit/",
+            "Keboola\\SynapseTransformation\\FunctionalTests\\": "tests/functional/"
         }
     },
     "scripts": {
@@ -49,5 +55,11 @@
     "config": {
         "sort-packages": true,
         "optimize-autoloader": true
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/keboola/sql-formatter"
+        }
+    ]
 }
