@@ -9,7 +9,16 @@ before_script:
   - export APP_IMAGE=keboola-component
   - docker -v
   - docker build -t $APP_IMAGE .
-  - docker run $APP_IMAGE composer ci
+  - ./utils/synapse-control.sh --resume
+  - ./utils/synapse-control.sh --waitForStart
+  - docker run
+    -e SYNAPSE_HOST
+    -e SYNAPSE_PORT
+    -e SYNAPSE_DATABASE
+    -e SYNAPSE_USER
+    -e SYNAPSE_PASSWORD
+    $APP_IMAGE
+      composer ci
 
   # push test image to ECR
   - docker pull quay.io/keboola/developer-portal-cli-v2:latest
