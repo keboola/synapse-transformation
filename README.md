@@ -1,27 +1,32 @@
-# my-component
+# Synapse transformation
 
-[![Build Status](https://travis-ci.com/keboola/my-component.svg?branch=master)](https://travis-ci.com/keboola/my-component)
+[![Build Status](https://travis-ci.com/keboola/synapse-transformation.svg?branch=master)](https://travis-ci.com/keboola/synapse-transformation)
 
-> Fill in description
-
-# Usage
-
-> fill in usage instructions
+Application which runs [KBC](https://connection.keboola.com/) transformations in Azure Synapse DB.
 
 ## Development
  
 Clone this repository and init the workspace with following command:
 
-```
-git clone https://github.com/keboola/my-component
-cd my-component
+```sh
+git clone https://github.com/keboola/synapse-transformation
+cd synapse-transformation
 docker-compose build
 docker-compose run --rm dev composer install --no-scripts
 ```
 
+Create `.env` file with following contents
+```env
+SYNAPSE_HOST=
+SYNAPSE_PORT=
+SYNAPSE_DATABASE=
+SYNAPSE_USER=
+SYNAPSE_PASSWORD=
+```
+
 Run the test suite using this command:
 
-```
+```sh
 docker-compose run --rm dev composer tests
 ```
  
