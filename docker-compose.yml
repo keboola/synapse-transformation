@@ -1,7 +1,13 @@
-version: '2'
+version: '3'
 services:
   dev:
     build: .
     volumes:
       - ./:/code
-      - ./data:/data
+    environment:
+      - SYNAPSE_HOST
+      - SYNAPSE_PORT
+      - SYNAPSE_DATABASE
+      - SYNAPSE_USER
+      - SYNAPSE_PASSWORD
+

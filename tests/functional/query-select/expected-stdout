@@ -1,0 +1,6 @@
+Processing block "Block 1".
+Processing code "Code 1".
+Running query "CREATE TABLE [new-table] ( product_name VARCHAR(100), price FLOAT )".
+Running query "INSERT INTO [new-table] (product_name, price) VALUES ('row1', 12.00)".
+Ignoring select query "SELECT * FROM [new-table]".
+Running query "INSERT INTO [new-table] (product_name, price) VALUES ('row2', 56.00)".

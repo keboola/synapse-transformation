@@ -1,0 +1,1 @@
+Query "INSERT INTO [not_found] VALUES (1, 2)" from block "Block 1" and code "Code 1" failed: "Could not find object 'not_found' or you do not have permission."

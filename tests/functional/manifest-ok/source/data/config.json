@@ -1,0 +1,46 @@
+{
+  "authorization": {
+    "workspace": {
+      "host": "$SYNAPSE_HOST",
+      "port": $SYNAPSE_PORT,
+      "database": "$SYNAPSE_DATABASE",
+      "user": "$SYNAPSE_USER",
+      "password": "$SYNAPSE_PASSWORD"
+    }
+  },
+  "storage": {
+    "output": {
+      "tables": [
+        {
+          "source": "table1",
+          "destination": "table1_dest"
+        },
+        {
+          "source": "table2",
+          "destination": "table2_dest"
+        }
+      ]
+    }
+  },
+  "parameters": {
+    "blocks": [
+      {
+        "name": "Block 1",
+        "codes": [
+          {
+            "name": "Code 1",
+            "script": [
+              "CREATE TABLE [table1] (product_name VARCHAR(100), price FLOAT, count BIGINT, available BIT)",
+              "INSERT INTO [table1] (product_name, price, count, available) VALUES ('row1', 12.00, 123, 1)",
+              "INSERT INTO [table1] (product_name, price, count, available) VALUES ('row2', 56.00, 345, 0)",
+              "CREATE TABLE [table2] (id INT NOT NULL, user_name VARCHAR(100))",
+              "CREATE TABLE [temp] (product_name VARCHAR(100), price FLOAT)",
+              "INSERT INTO [temp] (product_name, price) VALUES ('row1', 20.00)",
+              "INSERT INTO [temp] (product_name, price) VALUES ('row2', 40.00)"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

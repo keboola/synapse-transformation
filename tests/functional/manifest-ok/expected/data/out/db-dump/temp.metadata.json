@@ -1,0 +1,40 @@
+[
+          {
+                    "TABLE_NAME": "temp",
+                    "COLUMN_NAME": "product_name",
+                    "DATA_TYPE": "12",
+                    "TYPE_NAME": "varchar",
+                    "PRECISION": "100",
+                    "LENGTH": "100",
+                    "SCALE": null,
+                    "RADIX": null,
+                    "NULLABLE": "1",
+                    "REMARKS": null,
+                    "COLUMN_DEF": null,
+                    "SQL_DATA_TYPE": "12",
+                    "SQL_DATETIME_SUB": null,
+                    "CHAR_OCTET_LENGTH": "100",
+                    "ORDINAL_POSITION": "1",
+                    "IS_NULLABLE": "YES",
+                    "SS_DATA_TYPE": "39"
+                },
+          {
+                    "TABLE_NAME": "temp",
+                    "COLUMN_NAME": "price",
+                    "DATA_TYPE": "6",
+                    "TYPE_NAME": "float",
+                    "PRECISION": "15",
+                    "LENGTH": "8",
+                    "SCALE": null,
+                    "RADIX": "10",
+                    "NULLABLE": "1",
+                    "REMARKS": null,
+                    "COLUMN_DEF": null,
+                    "SQL_DATA_TYPE": "6",
+                    "SQL_DATETIME_SUB": null,
+                    "CHAR_OCTET_LENGTH": null,
+                    "ORDINAL_POSITION": "2",
+                    "IS_NULLABLE": "YES",
+                    "SS_DATA_TYPE": "109"
+                }
+      ]
