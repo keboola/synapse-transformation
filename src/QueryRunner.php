@@ -61,7 +61,6 @@ class QueryRunner
 
         // Skip empty query
         if (!$sql) {
-            $this->logger->info('Ignoring empty query.');
             return;
         }
 

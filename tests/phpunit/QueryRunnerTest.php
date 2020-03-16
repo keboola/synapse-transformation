@@ -75,7 +75,6 @@ class QueryRunnerTest extends TestCase
         Assert::assertSame([
             'Processing block "Block Name".',
             'Processing code "Code 1".',
-            'Ignoring empty query.',
             'Running query "INSERT INTO `temp` VALUES (1, 2, 3);".',
             'MOCK EXEC: INSERT INTO `temp` VALUES (1, 2, 3);',
         ], $this->getLoggedMessages());
