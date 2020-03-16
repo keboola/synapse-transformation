@@ -58,6 +58,17 @@ class ConfigTest extends TestCase
         Assert::assertSame('INSERT INTO `table` VALUES(1,2,3);', $scripts3_1[1]->getRawSql());
     }
 
+    public function testPortDefaultValue(): void
+    {
+        $config = new Config([
+            'authorization' => $this->getAuthorizationNodeExcept('port'),
+            'parameters' => $this->getParametersNode(),
+        ], new ConfigDefinition());
+
+        // Default value: 2 hours
+        Assert::assertSame(1433, $config->getPort());
+    }
+
     public function testQueryLimitDefaultValue(): void
     {
         $config = new Config([
@@ -156,13 +167,6 @@ class ConfigTest extends TestCase
                 'The child node "host" at path "root.authorization.workspace" must be configured.',
                 [
                     'authorization' => $this->getAuthorizationNodeExcept('host'),
-                    'parameters' => $this->getParametersNode(),
-                ],
-            ],
-            'missing authorization.workspace.port' => [
-                'The child node "port" at path "root.authorization.workspace" must be configured.',
-                [
-                    'authorization' => $this->getAuthorizationNodeExcept('port'),
                     'parameters' => $this->getParametersNode(),
                 ],
             ],

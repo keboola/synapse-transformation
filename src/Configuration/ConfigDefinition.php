@@ -33,7 +33,7 @@ class ConfigDefinition extends BaseConfigDefinition
                             ->isRequired()
                         ->end()
                         ->integerNode('port')
-                            ->isRequired()
+                            ->defaultValue(1433)
                         ->end()
                         ->scalarNode('user')
                             ->isRequired()
