@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e34c58845e5f1a13cf43bf3fd2c35826",
+    "content-hash": "dc015c3ed3e42cd6d679050016e706c0",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -405,16 +405,16 @@
         },
         {
             "name": "keboola/php-datatypes",
-            "version": "4.2.1",
+            "version": "dev-zajca-kbc-166-synapse",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-datatypes.git",
-                "reference": "325fe4eff3e3dfae986ebbdb769eaefd18be6086"
+                "reference": "7fb77ac9ef1aeceba0aa1ba37f6e92af4951c2ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/325fe4eff3e3dfae986ebbdb769eaefd18be6086",
-                "reference": "325fe4eff3e3dfae986ebbdb769eaefd18be6086",
+                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/7fb77ac9ef1aeceba0aa1ba37f6e92af4951c2ff",
+                "reference": "7fb77ac9ef1aeceba0aa1ba37f6e92af4951c2ff",
                 "shasum": ""
             },
             "require-dev": {
@@ -436,7 +436,7 @@
                     "email": "ondrej.hlavacek@keboola.com"
                 }
             ],
-            "time": "2019-12-05T14:49:18+00:00"
+            "time": "2020-02-12T10:11:42+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2783,7 +2783,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jdorn/sql-formatter": 20
+        "jdorn/sql-formatter": 20,
+        "keboola/php-datatypes": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

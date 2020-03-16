@@ -7,9 +7,10 @@ namespace Keboola\SynapseTransformation;
 use Doctrine\DBAL\Connection;
 use Keboola\Component\Manifest\ManifestManager;
 use Keboola\Component\Manifest\ManifestManager\Options\OutTableManifestOptions;
+use Keboola\Datatype\Definition\Exception\InvalidLengthException;
 use Keboola\SynapseTransformation\Configuration\OutputTableMapping;
 use Keboola\SynapseTransformation\Exception\UserException;
-use Keboola\SynapseTransformation\Platform\ColumnType;
+use Keboola\Datatype\Definition\Synapse as SynapseColumnType;
 use Psr\Log\LoggerInterface;
 
 class ManifestWriter
@@ -73,11 +74,20 @@ class ManifestWriter
         $metadata = [];
         foreach ($columns as $column) {
             $columnNames[] = $column['name'];
-            $type = new ColumnType($column['type'], [
+            $typeOptions = [
                 'length' => $column['length'],
                 'nullable' => $column['nullable'],
                 'default' => $column['default'],
-            ]);
+            ];
+
+            try {
+                $type = new SynapseColumnType($column['type'], $typeOptions);
+            } catch (InvalidLengthException $exception) {
+                // The database also reports the length for types that have it fixed
+                unset($typeOptions['length']);
+                $type = new SynapseColumnType($column['type'], $typeOptions);
+            }
+
             $metadata[$column['name']] = $type->toMetadata();
         }
 
