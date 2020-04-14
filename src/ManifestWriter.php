@@ -57,8 +57,8 @@ class ManifestWriter
 
     private function processTable(string $schemaName, OutputTableMapping $table): bool
     {
+        $tableReflection = new SynapseTableReflection($this->connection, $schemaName, $table->getSource());
         try {
-            $tableReflection = new SynapseTableReflection($this->connection, $schemaName, $table->getSource());
             $columns = $tableReflection->getColumnsDefinitions();
         } catch (ReflectionException $e) {
             // Table is missing
