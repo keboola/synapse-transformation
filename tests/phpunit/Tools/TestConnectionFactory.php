@@ -7,7 +7,7 @@ namespace Keboola\SynapseTransformation\Tests\Tools;
 use Doctrine\DBAL\Connection;
 use Keboola\SynapseTransformation\Platform\ConnectionFactory;
 
-trait TestConnectionFactory
+class TestConnectionFactory
 {
     public static function createConnection(int $queryTimeout = 30): Connection
     {

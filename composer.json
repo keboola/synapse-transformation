@@ -7,7 +7,7 @@
         "jdorn/sql-formatter": "dev-master",
         "keboola/common-exceptions": "^1.0",
         "keboola/php-component": "^8.1",
-        "keboola/php-datatypes": "dev-zajca-kbc-166-synapse"
+        "keboola/table-backend-utils": "^0.1"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1.0",
@@ -60,6 +60,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/keboola/sql-formatter"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/keboola/php-table-backend-utils"
         }
     ]
 }
