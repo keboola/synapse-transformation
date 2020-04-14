@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Keboola\SynapseTransformation;
 
+use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection;
 use Keboola\Component\Manifest\ManifestManager;
 use Keboola\Component\Manifest\ManifestManager\Options\OutTableManifestOptions;
-use Keboola\Datatype\Definition\Exception\InvalidLengthException;
+use Keboola\Datatype\Definition\Synapse;
+use Keboola\Datatype\Definition\Synapse as SynapseColumnType;
 use Keboola\SynapseTransformation\Configuration\OutputTableMapping;
 use Keboola\SynapseTransformation\Exception\UserException;
-use Keboola\Datatype\Definition\Synapse as SynapseColumnType;
-use Psr\Log\LoggerInterface;
+use Keboola\TableBackendUtils\Column\ColumnInterface;
+use Keboola\TableBackendUtils\ReflectionException;
+use Keboola\TableBackendUtils\Table\SynapseTableReflection;
 
 class ManifestWriter
 {
@@ -33,9 +36,11 @@ class ManifestWriter
      */
     public function processTables(array $tables): void
     {
+        $schemaName = $this->connection->query('SELECT SCHEMA_NAME()')->fetchColumn();
+
         $missingTables = [];
         foreach ($tables as $table) {
-            if (!$this->processTable($table)) {
+            if (!$this->processTable($schemaName, $table)) {
                 $missingTables[] = $table->getSource();
             }
         }
@@ -50,49 +55,27 @@ class ManifestWriter
         }
     }
 
-    private function processTable(OutputTableMapping $table): bool
+    private function processTable(string $schemaName, OutputTableMapping $table): bool
     {
-        $columns = $this->connection
-            ->query(sprintf(
-                'SELECT c.name, t.name AS type, c.max_length AS length, ' .
-                'c.is_nullable AS nullable, d.definition AS [default] ' .
-                'FROM sys.columns AS c ' .
-                'JOIN sys.types   AS t  ON c.user_type_id = t.user_type_id ' .
-                'JOIN sys.objects AS o  ON c.object_id = o.object_id '.
-                'JOIN sys.schemas AS s  ON o.schema_id = s.schema_id ' .
-                'LEFT JOIN sys.default_constraints d  ON c.default_object_id = d.object_id ' .
-                'WHERE o.type = \'U\' AND s.name = SCHEMA_NAME() AND o.name = %s',
-                $this->connection->quote($table->getSource()),
-            ))
-            ->fetchAll();
-        if (empty($columns)) {
-            $missingTables[] = $table->getSource();
+        $tableReflection = new SynapseTableReflection($this->connection, $schemaName, $table->getSource());
+        try {
+            $columns = $tableReflection->getColumnsDefinitions();
+        } catch (ReflectionException $e) {
+            // Table is missing
             return false;
         }
 
-        $columnNames = [];
         $metadata = [];
+        /** @var ColumnInterface  $column */
         foreach ($columns as $column) {
-            $columnNames[] = $column['name'];
-            $typeOptions = [
-                'length' => $column['length'],
-                'nullable' => $column['nullable'],
-                'default' => $column['default'],
-            ];
-
-            try {
-                $type = new SynapseColumnType($column['type'], $typeOptions);
-            } catch (InvalidLengthException $exception) {
-                // The database also reports the length for types that have it fixed
-                unset($typeOptions['length']);
-                $type = new SynapseColumnType($column['type'], $typeOptions);
-            }
-
-            $metadata[$column['name']] = $type->toMetadata();
+            $name = $column->getColumnName();
+            $type = $column->getColumnDefinition();
+            assert($type instanceof SynapseColumnType);
+            $metadata[$name] = $type->toMetadata();
         }
 
         $data = new OutTableManifestOptions();
-        $data->setColumns($columnNames);
+        $data->setColumns(array_keys($metadata));
         $data->setColumnMetadata($metadata);
         $this->manifestManager->writeTableManifest($table->getSource(), $data);
         return true;
