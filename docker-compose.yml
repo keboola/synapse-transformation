@@ -5,9 +5,9 @@ services:
     volumes:
       - ./:/code
     environment:
-      - SYNAPSE_HOST
+      - SYNAPSE_SERVER
       - SYNAPSE_PORT
       - SYNAPSE_DATABASE
-      - SYNAPSE_USER
-      - SYNAPSE_PASSWORD
+      - SYNAPSE_UID
+      - SYNAPSE_PWD
 

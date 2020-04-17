@@ -9,14 +9,18 @@ before_script:
   - export APP_IMAGE=keboola-component
   - docker -v
   - docker build -t $APP_IMAGE .
-  - ./utils/synapse-control.sh --resume
-  - ./utils/synapse-control.sh --waitForStart
+  - docker pull quay.io/keboola/azure-cli
+  # create synapse server
+  - . ./provisioning/synapse/synapse.sh -c
+  - echo $SYNAPSE_RESOURCE_ID
+
+script:
   - docker run
-    -e SYNAPSE_HOST
+    -e SYNAPSE_SERVER
     -e SYNAPSE_PORT
     -e SYNAPSE_DATABASE
-    -e SYNAPSE_USER
-    -e SYNAPSE_PASSWORD
+    -e SYNAPSE_UID
+    -e SYNAPSE_PWD
     $APP_IMAGE
       composer ci
 
@@ -28,11 +32,9 @@ before_script:
   - docker push $REPOSITORY:test
   - docker pull quay.io/keboola/syrup-cli:latest
 
-
-script:
-  # run test job inside KBC
-  # - docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_ID test
-  - skip
+after_script:
+  # delete synapse
+  - ./provisioning/synapse/synapse.sh -d
 
 deploy:
   provider: script

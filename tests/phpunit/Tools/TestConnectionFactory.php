@@ -13,11 +13,11 @@ class TestConnectionFactory
     {
         $factory = new ConnectionFactory();
         return $factory->create(
-            (string) getenv('SYNAPSE_HOST'),
+            (string) getenv('SYNAPSE_SERVER'),
             (int) getenv('SYNAPSE_PORT'),
             (string) getenv('SYNAPSE_DATABASE'),
-            (string) getenv('SYNAPSE_USER'),
-            (string) getenv('SYNAPSE_PASSWORD'),
+            (string) getenv('SYNAPSE_UID'),
+            (string) getenv('SYNAPSE_PWD'),
             $queryTimeout,
         );
     }
