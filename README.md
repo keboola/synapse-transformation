@@ -17,11 +17,11 @@ docker-compose run --rm dev composer install --no-scripts
 
 Create `.env` file with following contents
 ```env
-SYNAPSE_HOST=
+SYNAPSE_SERVER=
 SYNAPSE_PORT=
 SYNAPSE_DATABASE=
-SYNAPSE_USER=
-SYNAPSE_PASSWORD=
+SYNAPSE_UID=
+SYNAPSE_PWD=
 ```
 
 Run the test suite using this command:

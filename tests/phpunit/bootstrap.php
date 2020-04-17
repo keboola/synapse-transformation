@@ -9,11 +9,11 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 // Check environment
 $environments = [
-    'SYNAPSE_HOST',
+    'SYNAPSE_SERVER',
     'SYNAPSE_PORT',
     'SYNAPSE_DATABASE',
-    'SYNAPSE_USER',
-    'SYNAPSE_PASSWORD',
+    'SYNAPSE_UID',
+    'SYNAPSE_PWD',
 ];
 foreach ($environments as $environment) {
     if (empty(getenv($environment))) {

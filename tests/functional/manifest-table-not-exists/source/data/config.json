@@ -1,11 +1,11 @@
 {
   "authorization": {
     "workspace": {
-      "host": "$SYNAPSE_HOST",
+      "host": "$SYNAPSE_SERVER",
       "port": $SYNAPSE_PORT,
       "database": "$SYNAPSE_DATABASE",
-      "user": "$SYNAPSE_USER",
-      "password": "$SYNAPSE_PASSWORD"
+      "user": "$SYNAPSE_UID",
+      "password": "$SYNAPSE_PWD"
     }
   },
   "storage": {
