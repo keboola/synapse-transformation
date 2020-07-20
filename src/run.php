@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 use Keboola\Component\Logger;
 use Keboola\SynapseTransformation\Component;
-use Keboola\SynapseTransformation\Platform\ConnectionFactory;
-use Keboola\SynapseTransformation\Exception\UserException;
+use Keboola\CommonExceptions\UserExceptionInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -14,7 +13,7 @@ try {
     $app = new Component($logger);
     $app->execute();
     exit(0);
-} catch (UserException $e) {
+} catch (UserExceptionInterface $e) {
     $logger->error($e->getMessage());
     exit(1);
 } catch (\Throwable $e) {
