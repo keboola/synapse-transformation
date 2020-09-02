@@ -364,6 +364,7 @@ class ConfigTest extends TestCase
                 'user' => 'test-user',
                 'password' => 'test-password',
                 'database' => 'my-database',
+                'schema' => null,
             ],
         ];
     }

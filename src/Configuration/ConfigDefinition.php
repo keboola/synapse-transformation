@@ -27,6 +27,7 @@ class ConfigDefinition extends BaseConfigDefinition
             ->isRequired()
             ->children()
                 ->arrayNode('workspace')
+                    ->ignoreExtraKeys()
                     ->isRequired()
                     ->children()
                         ->scalarNode('host')
