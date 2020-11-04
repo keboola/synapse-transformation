@@ -18,6 +18,7 @@
             "script": [
               "CREATE TABLE [new-table] (product_name VARCHAR(100), price FLOAT)",
               "INSERT INTO [new-table] (product_name, price) VALUES ('row1', 12.00)",
+              "SELECT product_name, price INTO [new-table2] FROM [new-table]",
               "SELECT * FROM [new-table]",
               "INSERT INTO [new-table] (product_name, price) VALUES ('row2', 56.00)"
             ]
