@@ -11,7 +11,7 @@ before_script:
   - docker build -t $APP_IMAGE .
   - docker pull quay.io/keboola/azure-cli
   # create synapse server
-  - . ./provisioning/synapse/synapse.sh -c
+  - SYNAPSE_ENV=`./provisioning/synapse/synapse.sh -c` && export $(echo ${SYNAPSE_ENV} | xargs)
   - echo $SYNAPSE_RESOURCE_ID
 
 script:
