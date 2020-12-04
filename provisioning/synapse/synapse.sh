@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
 
+set -o errexit          # Exit on most errors (see the manual)
+set -o errtrace         # Make sure any error trap is inherited
+set -o nounset          # Disallow expansion of unset variables
 set -o pipefail         # Use last non-zero exit code in a pipeline
+#set -o xtrace          # Trace the execution of the script (debug)
 
-#REQUIRED ENV VARS
-#SYNAPSE_SERVER_NAME=
-#AZURE_RESOURCE_GROUP=
-#AZURE_SERVICE_PRINCIPAL_TENANT=
-#AZURE_SERVICE_PRINCIPAL=
-#AZURE_SERVICE_PRINCIPAL_PASSWORD=
+# Required environment variables
+: "${SYNAPSE_SERVER_NAME:?Need to set SYNAPSE_SERVER_NAME env variable}"
+: "${AZURE_RESOURCE_GROUP:?Need to set AZURE_RESOURCE_GROUP env variable}"
+: "${AZURE_SERVICE_PRINCIPAL_TENANT:?Need to set AZURE_SERVICE_PRINCIPAL_TENANT env variable}"
+: "${AZURE_SERVICE_PRINCIPAL:?Need to set AZURE_SERVICE_PRINCIPAL env variable}"
+: "${AZURE_SERVICE_PRINCIPAL_PASSWORD:?Need to set AZURE_SERVICE_PRINCIPAL_PASSWORD env variable}"
 
-#EXPORTED ENV VARS
-#SYNAPSE_SERVER_PASSWORD=
-#SYNAPSE_SQL_SERVER_NAME=
-#SYNAPSE_DW_SERVER_NAME=
-#SYNAPSE_RESOURCE_ID=
-#SYNAPSE_UID=
-#SYNAPSE_PWD=
-#SYNAPSE_DATABASE=
-#SYNAPSE_SERVER=
-
+# EXPORTED ENV VARS BY CREATE CMD
+# SYNAPSE_UID
+# SYNAPSE_PWD
+# SYNAPSE_SQL_SERVER_NAME
+# SYNAPSE_DW_SERVER_NAME
+# SYNAPSE_SERVER
+# SYNAPSE_DATABASE
+# SYNAPSE_RESOURCE_ID
 
 # DESC: Runs az cli cmd under principal login
 runCliCmd(){
@@ -40,45 +42,58 @@ createServer(){
     administratorPassword=${SYNAPSE_SERVER_PASSWORD} \
     warehouseName=${SYNAPSE_SERVER_NAME} \
     warehouseCapacity=900")
+    if [ $? -ne 0 ]; then
+      echo "Deploy failed." 1>&2
+      exit 1
+    fi
+
     export SYNAPSE_SQL_SERVER_NAME=$(echo ${output} | jq -r '.properties.outputs.sqlServerName.value')
     export SYNAPSE_DW_SERVER_NAME=$(echo ${output} | jq -r '.properties.outputs.warehouseName.value')
     export SYNAPSE_RESOURCE_ID=$(echo ${output} | jq -r '.properties.outputs.warehouseResourceId.value')
 
-    echo "Server deployed."
-    echo $SYNAPSE_SQL_SERVER_NAME
-    echo $SYNAPSE_DW_SERVER_NAME
-    echo $SYNAPSE_RESOURCE_ID
+    # Log messages to STDERR, so STDOUT contains only exports
+    echo "Server deployed: $SYNAPSE_SQL_SERVER_NAME" 1>&2;
 
-    runCliCmd "az sql server firewall-rule create \
+    local output=$(runCliCmd "az sql server firewall-rule create \
   --resource-group ${AZURE_RESOURCE_GROUP} \
   --server ${SYNAPSE_SQL_SERVER_NAME} \
   --name all \
   --start-ip-address 0.0.0.0 \
-  --end-ip-address 255.255.255.255"
+  --end-ip-address 255.255.255.255")
+    if [ $? -ne 0 ]; then
+      echo "Firewall rule modification failed." 1>&2
+      exit 1
+    fi
 
-    echo "Firewall rule set."
+    echo "Firewall rule set." 1>&2;
+    echo "$output" 1>&2;
 
-#    Set vars for php app
-    export SYNAPSE_UID=keboola
-    export SYNAPSE_PWD=${SYNAPSE_SERVER_PASSWORD}
-    export SYNAPSE_DATABASE=${SYNAPSE_DW_SERVER_NAME}
-    export SYNAPSE_SERVER=${SYNAPSE_SQL_SERVER_NAME}.database.windows.net
+    # Print vars for php app
+    echo "export SYNAPSE_UID=keboola"
+    echo "export SYNAPSE_PWD=${SYNAPSE_SERVER_PASSWORD}"
+    echo "export SYNAPSE_SQL_SERVER_NAME=${SYNAPSE_SQL_SERVER_NAME}"
+    echo "export SYNAPSE_DW_SERVER_NAME=${SYNAPSE_DW_SERVER_NAME}"
+    echo "export SYNAPSE_SERVER=${SYNAPSE_SQL_SERVER_NAME}.database.windows.net"
+    echo "export SYNAPSE_DATABASE=${SYNAPSE_DW_SERVER_NAME}"
+    echo "export SYNAPSE_RESOURCE_ID=${SYNAPSE_RESOURCE_ID}"
 }
 
 deleteServer(){
+  : "${SYNAPSE_DW_SERVER_NAME:?Need to set SYNAPSE_DW_SERVER_NAME env variable (exported by the create cmd).}"
+  : "${SYNAPSE_SQL_SERVER_NAME:?Need to set SYNAPSE_SQL_SERVER_NAME env variable (exported by the create cmd).}"
     local output=$(runCliCmd "az sql dw delete -y \
   --resource-group ${AZURE_RESOURCE_GROUP} \
   --name ${SYNAPSE_DW_SERVER_NAME} \
   --server ${SYNAPSE_SQL_SERVER_NAME}")
 
-  echo "Synapse deleted."
+  echo "Synapse deleted." 1>&2;
   echo $output
 
       local output=$(runCliCmd "az sql server delete -y \
   --resource-group ${AZURE_RESOURCE_GROUP} \
   --name ${SYNAPSE_SQL_SERVER_NAME}")
 
-  echo "Logical SQL server deleted."
+  echo "Logical SQL server deleted." 1>&2;
   echo $output
 
 # no right for principal to delete deploy
@@ -94,6 +109,7 @@ deleteServer(){
 # DESC: Usage help
 function script_usage() {
     cat << EOF
+Usage
 synapse.sh [-c| -d| -h]
 
 Script for starting azure synapse.
@@ -102,8 +118,12 @@ Script for starting azure synapse.
   -h|--help                Print this
   -d|--delete              Create server
   -c|--create              Delete server
+
+To auto-export ENV variables, after creating the server, run:
+SYNAPSE_ENV=`./provisioning/synapse/synapse.sh -c` && export $(echo ${SYNAPSE_ENV} | xargs)
 EOF
 }
+
 
 while [[ $# -gt 0 ]]; do
     param="$1"
