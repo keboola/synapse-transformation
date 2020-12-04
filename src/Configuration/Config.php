@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Keboola\SynapseTransformation\Configuration;
 
+use InvalidArgumentException;
 use Keboola\Component\Config\BaseConfig;
 
 class Config extends BaseConfig
 {
+    public const DEFAULT_QUERY_TIMEOUT = 7200;
+
     public function getHost(): string
     {
         return $this->getValue(['authorization', 'workspace', 'host']);
@@ -35,7 +38,20 @@ class Config extends BaseConfig
 
     public function getQueryTimeout(): int
     {
-        return (int) $this->getValue(['parameters', 'query_timeout']);
+        // Get value from the config
+        $value = $this->getValueOrNull(['parameters', 'query_timeout']);
+        if ($value) {
+            return $value;
+        }
+
+        // Get value from the image parameters
+        $value = $this->getValueOrNull(['image_parameters', 'default_query_timeout']);
+        if ($value) {
+            return $value;
+        }
+
+        // Default value
+        return self::DEFAULT_QUERY_TIMEOUT;
     }
 
     /**
@@ -58,5 +74,17 @@ class Config extends BaseConfig
             fn(array $data) => new OutputTableMapping($data),
             $this->getValue(['storage', 'output', 'tables'], [])
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getValueOrNull(array $keys)
+    {
+        try {
+            return $this->getValue($keys);
+        } catch (InvalidArgumentException $e) {
+            return null;
+        }
     }
 }
