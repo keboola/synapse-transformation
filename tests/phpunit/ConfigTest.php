@@ -87,6 +87,47 @@ class ConfigTest extends TestCase
         Assert::assertSame(7200, $config->getQueryTimeout());
     }
 
+    public function testQueryTimeoutFromImageParameters(): void
+    {
+        $config = new Config([
+            'authorization' => $this->getAuthorizationNode(),
+            'parameters' => [
+                'blocks' => [
+                    [
+                        'name' => 'Block 1',
+                        'codes' => [],
+                    ],
+                ],
+            ],
+            'image_parameters' => [
+                'default_query_timeout' => 123000,
+            ],
+        ], new ConfigDefinition());
+
+        Assert::assertSame(123000, $config->getQueryTimeout());
+    }
+
+    public function testQueryTimeoutFromConfigParameters(): void
+    {
+        $config = new Config([
+            'authorization' => $this->getAuthorizationNode(),
+            'parameters' => [
+                'query_timeout' => 456000,
+                'blocks' => [
+                    [
+                        'name' => 'Block 1',
+                        'codes' => [],
+                    ],
+                ],
+            ],
+            'image_parameters' => [
+                'default_query_timeout' => 123000,
+            ],
+        ], new ConfigDefinition());
+
+        Assert::assertSame(456000, $config->getQueryTimeout());
+    }
+
     /**
      * @dataProvider validConfigProvider
      */
