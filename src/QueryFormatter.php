@@ -4,11 +4,26 @@ declare(strict_types=1);
 
 namespace Keboola\SynapseTransformation;
 
+use SqlFormatter;
+
 class QueryFormatter
 {
+    public function __construct()
+    {
+        // Synapse supports "--" for line comment, and "/**/" for block comment.
+        // Char "#" means temp table, so it must not be used.
+        // https://docs.microsoft.com/en-us/sql/t-sql/language-elements/comment-transact-sql?view=sql-server-ver15
+        // https://docs.microsoft.com/en-us/sql/t-sql/language-elements/slash-star-comment-transact-sql?view=sql-server-ver15
+        SqlFormatter::setBoundaries(array_diff(SqlFormatter::DEFAULT_BOUNDARIES, ['#']));
+        SqlFormatter::$comment_tokens = [
+            ['--'],
+            ['/*', '*/'],
+        ];
+    }
+
     public function removeComments(string $rawSql): string
     {
-        return trim(\SqlFormatter::removeComments($rawSql));
+        return trim(SqlFormatter::removeComments($rawSql));
     }
 
     public function formatToLog(string $sql): string

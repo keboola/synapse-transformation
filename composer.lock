@@ -262,20 +262,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/sql-formatter.git",
-                "reference": "c33f7c1a6b3ee54125bb26202ccd1020d3bf221f"
+                "reference": "03c75614ddfe8804a16ddfdb4f4046555faa833e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/sql-formatter/zipball/c33f7c1a6b3ee54125bb26202ccd1020d3bf221f",
-                "reference": "c33f7c1a6b3ee54125bb26202ccd1020d3bf221f",
+                "url": "https://api.github.com/repos/keboola/sql-formatter/zipball/03c75614ddfe8804a16ddfdb4f4046555faa833e",
+                "reference": "03c75614ddfe8804a16ddfdb4f4046555faa833e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.4"
+                "php": ">=5.6"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "^5.0"
             },
+            "default-branch": true,
             "bin": [
                 "bin/sql-formatter"
             ],
@@ -307,9 +308,9 @@
                 "sql"
             ],
             "support": {
-                "source": "https://github.com/keboola/sql-formatter/tree/master"
+                "source": "https://github.com/keboola/sql-formatter/tree/1.3.1"
             },
-            "time": "2019-02-13T08:57:52+00:00"
+            "time": "2020-12-11T14:17:02+00:00"
         },
         {
             "name": "keboola/common-exceptions",
@@ -2933,5 +2934,6 @@
     },
     "platform-dev": {
         "ext-json": "*"
-    }
+    },
+    "plugin-api-version": "2.0.0"
 }

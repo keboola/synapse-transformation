@@ -49,6 +49,11 @@ class QueryFormatterTest extends TestCase
                 "SELECT \n  2",
                 "SELECT \n -- COMMENT\n 2",
             ],
+            // # is NOT comment in the Synapse
+            'temp-table' => [
+                "SELECT \n  * INTO #temp_table \nFROM \n  SOURCE_TABLE",
+                "-- COMMENT\nSELECT * INTO #temp_table FROM SOURCE_TABLE",
+            ],
         ];
     }
 
