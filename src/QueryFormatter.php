@@ -23,7 +23,7 @@ class QueryFormatter
 
     public function removeComments(string $rawSql): string
     {
-        return trim(SqlFormatter::removeComments($rawSql));
+        return trim(SqlFormatter::removeComments($rawSql, false));
     }
 
     public function formatToLog(string $sql): string
