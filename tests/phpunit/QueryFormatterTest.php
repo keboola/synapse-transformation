@@ -38,7 +38,7 @@ class QueryFormatterTest extends TestCase
     {
         return [
             'simple' => [
-                "SELECT \n  1",
+                "SELECT \n 1",
                 "SELECT \n 1",
             ],
             'emoji' => [
@@ -46,12 +46,12 @@ class QueryFormatterTest extends TestCase
                 "\u{1F30F}",
             ],
             'comment' => [
-                "SELECT \n  2",
+                "SELECT \n \n 2",
                 "SELECT \n -- COMMENT\n 2",
             ],
             // # is NOT comment in the Synapse
             'temp-table' => [
-                "SELECT \n  * INTO #temp_table \nFROM \n  SOURCE_TABLE",
+                'SELECT * INTO #temp_table FROM SOURCE_TABLE',
                 "-- COMMENT\nSELECT * INTO #temp_table FROM SOURCE_TABLE",
             ],
         ];
