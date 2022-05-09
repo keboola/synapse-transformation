@@ -74,9 +74,6 @@ jobs:
   tests:
     needs: build
     runs-on: ubuntu-latest
-    # strategy:
-    #   fail-fast: false
-    #   matrix: ...
     steps:
       -
         name: Check out the repo
@@ -96,10 +93,10 @@ jobs:
         name: Run tests
         run: |
           docker pull quay.io/keboola/azure-cli
-        # Create synapse server
+          
           SYNAPSE_ENV=`./provisioning/synapse/synapse.sh -c` && export $(echo ${SYNAPSE_ENV} | xargs)
           echo $SYNAPSE_RESOURCE_ID
-        # Run tests
+          
           docker run \
           -e SYNAPSE_SERVER \
           -e SYNAPSE_PORT \
@@ -108,7 +105,7 @@ jobs:
           -e SYNAPSE_PWD \
           ${{env.APP_IMAGE}} \
           composer ci
-        # Delete synapse server     
+          
           ./provisioning/synapse/synapse.sh -d
 
   tests-in-kbc:
