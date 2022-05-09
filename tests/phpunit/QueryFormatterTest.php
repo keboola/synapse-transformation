@@ -54,6 +54,11 @@ class QueryFormatterTest extends TestCase
                 'SELECT * INTO #temp_table FROM SOURCE_TABLE',
                 "-- COMMENT\nSELECT * INTO #temp_table FROM SOURCE_TABLE",
             ],
+            // # unicode values
+            'unicode-values' => [
+                'INSERT INTO [pokus] ([sloupec]) VALUES (N\'test jičín pokus nevím šěčěšč aaa\');',
+                'INSERT INTO [pokus] ([sloupec]) VALUES (N\'test jičín pokus nevím šěčěšč aaa\');',
+            ]
         ];
     }
 
