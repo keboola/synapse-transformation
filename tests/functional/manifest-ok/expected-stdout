@@ -1,9 +1,9 @@
 Processing block "Block 1".
 Processing code "Code 1".
-Running query "CREATE TABLE [table1] ( product_name VARCHAR(100), price FLOAT, count BIGINT, available BIT )".
-Running query "INSERT INTO [table1] ( product_name, price, count, available ) VALUES ('row1', 12.00, 123, 1)".
-Running query "INSERT INTO [table1] ( product_name, price, count, available ) VALUES ('row2', 56.00, 345, 0)".
-Running query "CREATE TABLE [table2] ( id INT NOT NULL, user_name VARCHAR(100) )".
-Running query "CREATE TABLE [temp] ( product_name VARCHAR(100), price FLOAT )".
+Running query "CREATE TABLE [table1] (product_name VARCHAR(100), price FLOAT, count BIGINT, available BIT)".
+Running query "INSERT INTO [table1] (product_name, price, count, available) VALUES ('row1', 12.00, 123, 1)".
+Running query "INSERT INTO [table1] (product_name, price, count, available) VALUES ('row2', 56.00, 345, 0)".
+Running query "CREATE TABLE [table2] (id INT NOT NULL, user_name VARCHAR(100))".
+Running query "CREATE TABLE [temp] (product_name VARCHAR(100), price FLOAT)".
 Running query "INSERT INTO [temp] (product_name, price) VALUES ('row1', 20.00)".
 Running query "INSERT INTO [temp] (product_name, price) VALUES ('row2', 40.00)".

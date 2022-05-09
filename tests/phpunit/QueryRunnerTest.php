@@ -75,8 +75,8 @@ class QueryRunnerTest extends TestCase
         Assert::assertSame([
             'Processing block "Block Name".',
             'Processing code "Code 1".',
-            'Running query "INSERT INTO `temp` VALUES (1, 2, 3);".',
-            'MOCK EXEC: INSERT INTO `temp` VALUES (1, 2, 3);',
+            'Running query "INSERT INTO `temp` VALUES (1,2,3);".',
+            'MOCK EXEC: INSERT INTO `temp` VALUES (1,2,3);',
         ], $this->getLoggedMessages());
     }
 
@@ -88,8 +88,8 @@ class QueryRunnerTest extends TestCase
             'Processing block "Block Name".',
             'Processing code "Code 1".',
             'Ignoring select query "SeLeCt foo FROM bar".',
-            'Running query "INSERT INTO `temp` VALUES (1, 2, 3);".',
-            'MOCK EXEC: INSERT INTO `temp` VALUES (1, 2, 3);',
+            'Running query "INSERT INTO `temp` VALUES (1,2,3);".',
+            'MOCK EXEC: INSERT INTO `temp` VALUES (1,2,3);',
         ], $this->getLoggedMessages());
     }
 
@@ -102,7 +102,7 @@ class QueryRunnerTest extends TestCase
         $blocks = $this->createBlocks(['INSERT INTO `temp` VALUES (1,2,3);']);
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'Query "INSERT INTO `temp` VALUES (1, 2, 3);" ' .
+            'Query "INSERT INTO `temp` VALUES (1,2,3);" ' .
             'from block "Block Name" and code "Code 1" failed: "Some error."'
         );
         $this->queryRunner->processBlocks($blocks);
