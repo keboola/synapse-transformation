@@ -1,7 +1,5 @@
 # Synapse transformation
 
-[![Build Status](https://travis-ci.com/keboola/synapse-transformation.svg?branch=master)](https://travis-ci.com/keboola/synapse-transformation)
-
 Application which runs [KBC](https://connection.keboola.com/) transformations in Azure Synapse DB.
 
 ## Development
