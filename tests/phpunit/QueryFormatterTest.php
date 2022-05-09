@@ -58,7 +58,7 @@ class QueryFormatterTest extends TestCase
             'unicode-values' => [
                 'INSERT INTO [pokus] ([sloupec]) VALUES (N\'test jičín pokus nevím šěčěšč aaa\');',
                 'INSERT INTO [pokus] ([sloupec]) VALUES (N\'test jičín pokus nevím šěčěšč aaa\');',
-            ]
+            ],
         ];
     }
 
