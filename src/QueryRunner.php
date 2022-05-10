@@ -65,7 +65,8 @@ class QueryRunner
         }
 
         // Skip select
-        if (strtoupper(substr($sqlToLog, 0, 6)) === 'SELECT' && !strpos(strtoupper($sqlToLog), 'INTO')) {
+        if (strtoupper(substr($this->queryFormatter->removeWhiteSpace($sql), 0, 6)) === 'SELECT' &&
+            !strpos(strtoupper($this->queryFormatter->removeWhiteSpace($sql)), 'INTO')) {
             $this->logger->info(sprintf('Ignoring select query "%s".', $sqlToLog));
             return;
         }

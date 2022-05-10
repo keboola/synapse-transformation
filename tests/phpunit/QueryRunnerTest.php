@@ -82,12 +82,32 @@ class QueryRunnerTest extends TestCase
 
     public function testIgnoreSelect(): void
     {
-        $blocks = $this->createBlocks(['  SeLeCt foo FROM bar  ', 'INSERT INTO `temp` VALUES (1,2,3);']);
+        $blocks = $this->createBlocks([
+            '  SeLeCt foo FROM bar  ',
+            "  \n\t SeLECT with FROM whiteSpace",
+            // phpcs:disable
+            "  \n\t SELECT longTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongText INTO longTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongText",
+            // phpcs:enable
+            'INSERT INTO `temp` VALUES (1,2,3);',
+        ]);
         $this->queryRunner->processBlocks($blocks);
         Assert::assertSame([
             'Processing block "Block Name".',
             'Processing code "Code 1".',
             'Ignoring select query "SeLeCt foo FROM bar".',
+            'Ignoring select query "SeLECT with FROM whiteSpace".',
+            // phpcs:disable
+            <<<EOF
+Running query "SELECT longTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongT
+...
+TextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongText".
+EOF,
+            <<<EOF
+MOCK EXEC: SELECT longTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongT
+...
+TextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongTextlongText
+EOF,
+            // phpcs:enable
             'Running query "INSERT INTO `temp` VALUES (1,2,3);".',
             'MOCK EXEC: INSERT INTO `temp` VALUES (1,2,3);',
         ], $this->getLoggedMessages());
