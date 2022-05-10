@@ -59,6 +59,11 @@ class QueryFormatterTest extends TestCase
                 'INSERT INTO [pokus] ([sloupec]) VALUES (N\'test jičín pokus nevím šěčěšč aaa\');',
                 'INSERT INTO [pokus] ([sloupec]) VALUES (N\'test jičín pokus nevím šěčěšč aaa\');',
             ],
+            // # whitespaces
+            'white-spaces' => [
+                'SELECT * INTO #temp_table FROM SOURCE_TABLE',
+                "   \n\t\n SELECT * INTO #temp_table FROM SOURCE_TABLE",
+            ],
         ];
     }
 

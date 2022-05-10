@@ -28,9 +28,7 @@ class QueryFormatter
 
     public function formatToLog(string $sql): string
     {
-        // Remove new lines and indentation (logger removes line breaks)
-        $sql = preg_replace('~\s*\n+\s*~', ' ', $sql);
-        assert(is_string($sql));
+        $sql = $this->removeWhiteSpace($sql);
 
         // Shorten
         if (mb_strlen($sql) > 1000) {
@@ -39,6 +37,15 @@ class QueryFormatter
                 "\n...\n" .
                 mb_substr($sql, -500, null, 'UTF-8');
         }
+
+        return $sql;
+    }
+
+    public function removeWhiteSpace(string $sql): string
+    {
+        // Remove new lines and indentation (logger removes line breaks)
+        $sql = preg_replace('~\s*\n+\s*~', ' ', $sql);
+        assert(is_string($sql));
 
         return $sql;
     }
