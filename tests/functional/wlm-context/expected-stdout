@@ -1,0 +1,4 @@
+Processing block "Block 1".
+Processing code "Code 1".
+Running query "CREATE TABLE [table-context] (context VARCHAR(100))".
+Running query "INSERT INTO [table-context] SELECT convert(varchar(100), SESSION_CONTEXT(N'wlm_context')) as 'context';".

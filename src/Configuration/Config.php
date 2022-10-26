@@ -36,6 +36,12 @@ class Config extends BaseConfig
         return $this->getValue(['authorization', 'workspace', 'database']);
     }
 
+    public function getWlmContext(): string
+    {
+        $defaultContext = sprintf('%s-transformation', (string) getenv('KBC_PROJECTID'));
+        return $this->getValue(['authorization', 'context'], $defaultContext);
+    }
+
     public function getQueryTimeout(): int
     {
         // Get value from the config

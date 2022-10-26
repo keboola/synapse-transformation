@@ -4,10 +4,12 @@ services:
     build: .
     volumes:
       - ./:/code
+      - ./data/:/data
     environment:
       - SYNAPSE_SERVER
       - SYNAPSE_PORT
       - SYNAPSE_DATABASE
       - SYNAPSE_UID
       - SYNAPSE_PWD
+      - KBC_PROJECTID
 

@@ -26,6 +26,8 @@ env:
   SYNAPSE_PORT: 1433
   SYNAPSE_SERVER_NAME: "synapse-transformations-ci-server"
 
+  KBC_PROJECTID: 12345
+
   # Test KBC project
   KBC_STORAGE_TOKEN: ${{ secrets.KBC_STORAGE_TOKEN }}
   KBC_TEST_PROJECT_URL: ""
@@ -103,6 +105,7 @@ jobs:
           -e SYNAPSE_DATABASE \
           -e SYNAPSE_UID \
           -e SYNAPSE_PWD \
+          -e KBC_PROJECTID \
           ${{env.APP_IMAGE}} \
           composer ci
           

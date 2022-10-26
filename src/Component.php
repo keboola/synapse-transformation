@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Keboola\SynapseTransformation;
 
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Keboola\Component\BaseComponent;
 use Keboola\SynapseTransformation\Configuration\Config;
@@ -16,21 +17,39 @@ class Component extends BaseComponent
 
     private ManifestWriter $manifestWriter;
 
+    private Connection $connection;
+
     public function __construct(LoggerInterface $logger)
     {
         parent::__construct($logger);
         $connectionFactory = new ConnectionFactory();
-        $connection = $connectionFactory->createFromConfig($this->getConfig());
+        $this->connection = $connectionFactory->createFromConfig($this->getConfig());
         $queryFormatter = new QueryFormatter();
-        $this->queryRunner = new QueryRunner($logger, $connection, $queryFormatter);
-        $this->manifestWriter = new ManifestWriter($logger, $connection, $this->getManifestManager());
+        $this->queryRunner = new QueryRunner($logger, $this->connection, $queryFormatter);
+        $this->manifestWriter = new ManifestWriter($logger, $this->connection, $this->getManifestManager());
     }
 
     protected function run(): void
     {
         $config = $this->getConfig();
+        $this->setWlmContext($this->connection, $this->getConfig()->getWlmContext());
         $this->queryRunner->processBlocks($config->getBlocks());
         $this->manifestWriter->processTables($config->getOutputTablesMapping());
+        $this->setWlmContext($this->connection);
+    }
+
+    private function setWlmContext(Connection $connection, ?string $wlmContext = null): void
+    {
+        $sqlTemplate = <<<SQL
+EXEC sys.sp_set_session_context @key = 'wlm_context', @value = %s;
+SQL;
+
+        $sql = sprintf(
+            $sqlTemplate,
+            $wlmContext ? $connection->quote($wlmContext) : 'null'
+        );
+
+        $connection->query($sql)->execute();
     }
 
     public function getConfig(): Config

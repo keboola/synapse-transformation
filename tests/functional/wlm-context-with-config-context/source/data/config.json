@@ -1,0 +1,28 @@
+{
+  "authorization": {
+    "context": "config-context",
+    "workspace": {
+      "host": "$SYNAPSE_SERVER",
+      "port": $SYNAPSE_PORT,
+      "database": "$SYNAPSE_DATABASE",
+      "user": "$SYNAPSE_UID",
+      "password": "$SYNAPSE_PWD"
+    }
+  },
+  "parameters": {
+    "blocks": [
+      {
+        "name": "Block 1",
+        "codes": [
+          {
+            "name": "Code 1",
+            "script": [
+              "CREATE TABLE [table-context] (context VARCHAR(100))",
+              "INSERT INTO [table-context] SELECT convert(varchar(100), SESSION_CONTEXT(N'wlm_context')) as 'context';"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
