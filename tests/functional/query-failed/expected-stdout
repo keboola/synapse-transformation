@@ -1,3 +1,7 @@
 Processing block "Block 1".
 Processing code "Code 1".
 Running query "INSERT INTO [not_found] VALUES (1, 2)".
+An exception occurred while executing 'INSERT INTO [not_found] VALUES (1, 2)':  SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Could not find object 'not_found' or you do not have permission.. Retrying... [1x]
+An exception occurred while executing 'INSERT INTO [not_found] VALUES (1, 2)':  SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Could not find object 'not_found' or you do not have permission.. Retrying... [2x]
+An exception occurred while executing 'INSERT INTO [not_found] VALUES (1, 2)':  SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Could not find object 'not_found' or you do not have permission.. Retrying... [3x]
+An exception occurred while executing 'INSERT INTO [not_found] VALUES (1, 2)':  SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Could not find object 'not_found' or you do not have permission.. Retrying... [4x]

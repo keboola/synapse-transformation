@@ -11,6 +11,9 @@ use Keboola\SynapseTransformation\Configuration\Script;
 use Keboola\SynapseTransformation\Configuration\Block;
 use Keboola\SynapseTransformation\Exception\UserException;
 use Psr\Log\LoggerInterface;
+use Retry\BackOff\ExponentialBackOffPolicy;
+use Retry\Policy\SimpleRetryPolicy;
+use Retry\RetryProxy;
 
 class QueryRunner
 {
@@ -73,8 +76,16 @@ class QueryRunner
 
         // Run
         $this->logger->info(sprintf('Running query "%s".', $sqlToLog));
+        $retryProxy = new RetryProxy(
+            new SimpleRetryPolicy(5),
+            new ExponentialBackOffPolicy(),
+            $this->logger
+        );
+
         try {
-            $this->connection->exec($sql);
+            $retryProxy->call(function () use ($sql): void {
+                $this->connection->exec($sql);
+            });
         } catch (\Throwable $originException) {
             $exception = $originException;
 

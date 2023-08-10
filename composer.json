@@ -7,6 +7,7 @@
         "jdorn/sql-formatter": "dev-master",
         "keboola/common-exceptions": "^1.0",
         "keboola/php-component": "^8.1",
+        "keboola/retry": "^0.5.1",
         "keboola/table-backend-utils": "^0.1"
     },
     "require-dev": {
