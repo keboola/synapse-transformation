@@ -11,6 +11,10 @@ use Keboola\SynapseTransformation\Configuration\Script;
 use Keboola\SynapseTransformation\Configuration\Block;
 use Keboola\SynapseTransformation\Exception\UserException;
 use Psr\Log\LoggerInterface;
+use Retry\BackOff\ExponentialBackOffPolicy;
+use Retry\Policy\CallableRetryPolicy;
+use Retry\RetryProxy;
+use Throwable;
 
 class QueryRunner
 {
@@ -19,6 +23,11 @@ class QueryRunner
     private Connection $connection;
 
     private QueryFormatter $queryFormatter;
+
+    private const RETRY_ERROR_CODES = [
+        'Error code 0x274C',
+        'Error code 0x68',
+    ];
 
     public function __construct(LoggerInterface $logger, Connection $connection, QueryFormatter $queryFormatter)
     {
@@ -73,9 +82,31 @@ class QueryRunner
 
         // Run
         $this->logger->info(sprintf('Running query "%s".', $sqlToLog));
+        $retryProxy = new RetryProxy(
+            new CallableRetryPolicy(function (Throwable $originException): bool {
+                $exception = $originException;
+
+                if ($exception instanceof DBALException) {
+                    $exception =  $exception->getPrevious() ?? $exception;
+                }
+
+                foreach (self::RETRY_ERROR_CODES as $retryErrorCode) {
+                    if (strpos($exception->getMessage(), $retryErrorCode) !== false) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }),
+            new ExponentialBackOffPolicy(),
+            $this->logger
+        );
+
         try {
-            $this->connection->exec($sql);
-        } catch (\Throwable $originException) {
+            $retryProxy->call(function () use ($sql): void {
+                $this->connection->exec($sql);
+            });
+        } catch (Throwable $originException) {
             $exception = $originException;
 
             // Unwrap to get better error message
